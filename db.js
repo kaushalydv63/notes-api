@@ -1,25 +1,27 @@
 const mysql = require('mysql2');
 
-// Connection Pool use karne se connection disconnect hone ki problem khatam ho jati hai
+// MySQL Connection Pool
 const db = mysql.createPool({
-  host: 'localhost',
-  port: 3307,
-  user: 'root',
-  password: 'YourNewStrongPassword123!',
-  database: 'u205680228_cricket_score',
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT || 3306,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
 });
 
-// Test connection pool
+// Test Database Connection
 db.getConnection((err, connection) => {
   if (err) {
-    console.error('Database Connection Failed:', err.message);
+    console.error("❌ Database Connection Failed:", err.message);
     return;
   }
-  console.log('MySQL Database Connected Successfully via Pool!');
-  connection.release(); // Connection wapas pool me bhej diya
+
+  console.log("✅ MySQL Database Connected Successfully!");
+  connection.release();
 });
 
 module.exports = db;
